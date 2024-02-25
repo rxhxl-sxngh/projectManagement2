@@ -32,4 +32,13 @@ public class Job {
     public void setHourlyWage(double hourlyWage) {
         this.hourlyWage = hourlyWage;
     }
+
+    @Override
+    public String toString() {
+        return "Job{" +
+                "jobClassID=" + jobClassID +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", hourlyWage=" + hourlyWage +
+                '}';
+    }
 }

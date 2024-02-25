@@ -32,4 +32,13 @@ public class Employee {
     public void setJobClassID(int jobClassID) {
         this.jobClassID = jobClassID;
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeID=" + employeeID +
+                ", employeeName='" + employeeName + '\'' +
+                ", jobClassID=" + jobClassID +
+                '}';
+    }
 }
