@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class EmployeeView extends JFrame {
     private JTextField employeeIDField;
@@ -18,7 +19,7 @@ public class EmployeeView extends JFrame {
         panel.setLayout(new GridLayout(4, 2));
 
         JLabel operationLabel = new JLabel("Select Operation:");
-        String[] operations = {"Add Employee", "Update Employee", "Delete Employee"};
+        String[] operations = {"Show Employees", "Add Employee", "Update Employee", "Delete Employee"};
         operationComboBox = new JComboBox<>(operations);
         panel.add(operationLabel);
         panel.add(operationComboBox);
@@ -29,6 +30,9 @@ public class EmployeeView extends JFrame {
                 String selectedOperation = (String) operationComboBox.getSelectedItem();
                 assert selectedOperation != null;
                 switch (selectedOperation) {
+                    case "Show Employees":
+                        showEmployees();
+                        break;
                     case "Add Employee":
                         addEmployee();
                         break;
@@ -43,6 +47,34 @@ public class EmployeeView extends JFrame {
         });
 
         add(panel);
+    }
+
+    private void showEmployees() {
+        panel.removeAll();
+        setSize(600, 400);
+        panel.setLayout(new BorderLayout());
+
+        List<Employee> employeeList = DataAccess.getAllEmployees();
+
+        String[] columnNames = {"Employee ID", "Employee Name", "Job Class ID"};
+        Object[][] data = new Object[employeeList.size()][3];
+
+        for (int i = 0; i < employeeList.size(); i++) {
+            Employee employee = employeeList.get(i);
+            data[i][0] = employee.getEmployeeID();
+            data[i][1] = employee.getEmployeeName();
+            data[i][2] = employee.getJobClassID();
+        }
+
+        JTable table = new JTable(data, columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton, BorderLayout.SOUTH);
+
+        revalidate();
+        repaint();
     }
 
     private void addEmployee() {
@@ -187,6 +219,7 @@ public class EmployeeView extends JFrame {
 
     private void showOperationSelectionView() {
         panel.removeAll();
+        setSize(300, 200);
         panel.setLayout(new GridLayout(4, 2));
         JLabel operationLabel = new JLabel("Select Operation:");
         panel.add(operationLabel);
@@ -202,5 +235,3 @@ public class EmployeeView extends JFrame {
         });
     }
 }
-
-
