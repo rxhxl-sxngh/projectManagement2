@@ -18,7 +18,7 @@ public class EmployeeView extends JFrame {
         panel.setLayout(new GridLayout(4, 2));
 
         JLabel operationLabel = new JLabel("Select Operation:");
-        String[] operations = {"Add Employee", "Update Employee"};
+        String[] operations = {"Add Employee", "Update Employee", "Delete Employee"};
         operationComboBox = new JComboBox<>(operations);
         panel.add(operationLabel);
         panel.add(operationComboBox);
@@ -28,10 +28,16 @@ public class EmployeeView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String selectedOperation = (String) operationComboBox.getSelectedItem();
                 assert selectedOperation != null;
-                if (selectedOperation.equals("Add Employee")) {
-                    addFields();
-                } else {
-                    updateFields();
+                switch (selectedOperation) {
+                    case "Add Employee":
+                        addEmployee();
+                        break;
+                    case "Update Employee":
+                        updateEmployee();
+                        break;
+                    case "Delete Employee":
+                        deleteEmployee();
+                        break;
                 }
             }
         });
@@ -39,7 +45,7 @@ public class EmployeeView extends JFrame {
         add(panel);
     }
 
-    private void addFields() {
+    private void addEmployee() {
         panel.removeAll(); // Clear previous components
         panel.setLayout(new GridLayout(4, 2));
 
@@ -86,7 +92,7 @@ public class EmployeeView extends JFrame {
         return addButton;
     }
 
-    private void updateFields() {
+    private void updateEmployee() {
         panel.removeAll(); // Clear previous components
         panel.setLayout(new GridLayout(4, 2));
 
@@ -133,6 +139,40 @@ public class EmployeeView extends JFrame {
         return updateButton;
     }
 
+    private void deleteEmployee() {
+        panel.removeAll(); // Clear previous components
+        panel.setLayout(new GridLayout(2, 2));
+
+        JLabel employeeIDLabel = new JLabel("Employee ID:");
+        employeeIDField = new JTextField();
+        panel.add(employeeIDLabel);
+        panel.add(employeeIDField);
+
+        JButton removeButton = getRemoveButton();
+        panel.add(removeButton);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton);
+
+        revalidate(); // Refresh the layout
+        repaint(); // Repaint the component
+    }
+
+    private JButton getRemoveButton() {
+        JButton removeButton = new JButton("Delete");
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Remove employee
+                int employeeID = Integer.parseInt(employeeIDField.getText());
+                DataAccess.deleteEmployee(employeeID);
+                // Show operation selection view
+                showOperationSelectionView();
+            }
+        });
+        return removeButton;
+    }
+
     private JButton getBackButton() {
         JButton backButton = new JButton("Go Back");
         backButton.addActionListener(new ActionListener() {
@@ -147,6 +187,7 @@ public class EmployeeView extends JFrame {
 
     private void showOperationSelectionView() {
         panel.removeAll();
+        panel.setLayout(new GridLayout(4, 2));
         JLabel operationLabel = new JLabel("Select Operation:");
         panel.add(operationLabel);
         panel.add(operationComboBox);
