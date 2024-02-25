@@ -58,6 +58,17 @@ public class EmployeeView extends JFrame {
         panel.add(jobClassIDLabel);
         panel.add(jobClassIDField);
 
+        JButton addButton = getAddButton();
+        panel.add(addButton);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton);
+
+        revalidate(); // Refresh the layout
+        repaint(); // Repaint the component
+    }
+
+    private JButton getAddButton() {
         JButton addButton = new JButton("Add");
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -72,13 +83,7 @@ public class EmployeeView extends JFrame {
                 showOperationSelectionView();
             }
         });
-        panel.add(addButton);
-
-        JButton backButton = getBackButton();
-        panel.add(backButton);
-
-        revalidate(); // Refresh the layout
-        repaint(); // Repaint the component
+        return addButton;
     }
 
     private void updateFields() {
@@ -100,6 +105,17 @@ public class EmployeeView extends JFrame {
         panel.add(jobClassIDLabel);
         panel.add(jobClassIDField);
 
+        JButton updateButton = getUpdateButton();
+        panel.add(updateButton);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton);
+
+        revalidate(); // Refresh the layout
+        repaint(); // Repaint the component
+    }
+
+    private JButton getUpdateButton() {
         JButton updateButton = new JButton("Update");
         updateButton.addActionListener(new ActionListener() {
             @Override
@@ -114,13 +130,7 @@ public class EmployeeView extends JFrame {
                 showOperationSelectionView();
             }
         });
-        panel.add(updateButton);
-
-        JButton backButton = getBackButton();
-        panel.add(backButton);
-
-        revalidate(); // Refresh the layout
-        repaint(); // Repaint the component
+        return updateButton;
     }
 
     private JButton getBackButton() {
