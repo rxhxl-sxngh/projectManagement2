@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class JobView extends JFrame {
     private JTextField jobClassIDField;
@@ -19,7 +20,7 @@ public class JobView extends JFrame {
         panel.setLayout(new GridLayout(4, 2));
 
         JLabel operationLabel = new JLabel("Select Operation:");
-        String[] operations = {"Add Job Class", "Update Job Class", "Delete Job Class"};
+        String[] operations = {"Show Job Classes", "Add Job Class", "Update Job Class", "Delete Job Class"};
         operationComboBox = new JComboBox<>(operations);
         panel.add(operationLabel);
         panel.add(operationComboBox);
@@ -30,6 +31,9 @@ public class JobView extends JFrame {
                 String selectedOperation = (String) operationComboBox.getSelectedItem();
                 assert selectedOperation != null;
                 switch (selectedOperation) {
+                    case "Show Job Classes":
+                        showJobClasses();
+                        break;
                     case "Add Job Class":
                         addJob();
                         break;
@@ -45,6 +49,35 @@ public class JobView extends JFrame {
 
         add(panel);
     }
+
+    private void showJobClasses() {
+        panel.removeAll();
+        setSize(600, 400);
+        panel.setLayout(new BorderLayout());
+
+        List<Job> jobList = DataAccess.getAllJobClasses();
+
+        String[] columnNames = {"Job Class ID", "Job Title", "Hourly Wage"};
+        Object[][] data = new Object[jobList.size()][3];
+
+        for (int i = 0; i < jobList.size(); i++) {
+            Job job = jobList.get(i);
+            data[i][0] = job.getJobClassID();
+            data[i][1] = job.getJobTitle();
+            data[i][2] = job.getHourlyWage();
+        }
+
+        JTable table = new JTable(data, columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton, BorderLayout.SOUTH);
+
+        revalidate();
+        repaint();
+    }
+
 
     private void addJob() {
         panel.removeAll(); // Clear previous components
@@ -188,6 +221,7 @@ public class JobView extends JFrame {
 
     private void showOperationSelectionView() {
         panel.removeAll();
+        setSize(300, 200);
         panel.setLayout(new GridLayout(4, 2));
         JLabel operationLabel = new JLabel("Select Operation:");
         panel.add(operationLabel);
