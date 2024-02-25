@@ -68,9 +68,14 @@ public class EmployeeView extends JFrame {
                 int jobClassID = Integer.parseInt(jobClassIDField.getText());
                 Employee employee = new Employee(employeeID, employeeName, jobClassID);
                 DataAccess.addEmployee(employee);
+                // Show operation selection view
+                showOperationSelectionView();
             }
         });
         panel.add(addButton);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton);
 
         revalidate(); // Refresh the layout
         repaint(); // Repaint the component
@@ -105,12 +110,38 @@ public class EmployeeView extends JFrame {
                 int jobClassID = Integer.parseInt(jobClassIDField.getText());
                 Employee employee = new Employee(employeeID, employeeName, jobClassID);
                 DataAccess.updateEmployee(employee);
+                // Show operation selection view
+                showOperationSelectionView();
             }
         });
         panel.add(updateButton);
 
+        JButton backButton = getBackButton();
+        panel.add(backButton);
+
         revalidate(); // Refresh the layout
         repaint(); // Repaint the component
+    }
+
+    private JButton getBackButton() {
+        JButton backButton = new JButton("Go Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Show operation selection view
+                showOperationSelectionView();
+            }
+        });
+        return backButton;
+    }
+
+    private void showOperationSelectionView() {
+        panel.removeAll();
+        JLabel operationLabel = new JLabel("Select Operation:");
+        panel.add(operationLabel);
+        panel.add(operationComboBox);
+        panel.revalidate();
+        panel.repaint();
     }
 
     public static void main(String[] args) {

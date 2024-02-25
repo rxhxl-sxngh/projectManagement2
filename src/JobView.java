@@ -59,6 +59,17 @@ public class JobView extends JFrame {
         panel.add(hourlyWageLabel);
         panel.add(hourlyWageField);
 
+        JButton addButton = getAddButton();
+        panel.add(addButton);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton);
+
+        revalidate(); // Refresh the layout
+        repaint(); // Repaint the component
+    }
+
+    private JButton getAddButton() {
         JButton addButton = new JButton("Add");
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -69,12 +80,11 @@ public class JobView extends JFrame {
                 double hourlyWage = Double.parseDouble(hourlyWageField.getText());
                 Job job = new Job(jobClassID, jobTitle, hourlyWage);
                 DataAccess.addJobClass(job);
+                // Show operation selection view
+                showOperationSelectionView();
             }
         });
-        panel.add(addButton);
-
-        revalidate(); // Refresh the layout
-        repaint(); // Repaint the component
+        return addButton;
     }
 
     private void updateFields() {
@@ -96,14 +106,17 @@ public class JobView extends JFrame {
         panel.add(hourlyWageLabel);
         panel.add(hourlyWageField);
 
-        JButton updateButton = getjButton();
+        JButton updateButton = getUpdateButton();
         panel.add(updateButton);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton);
 
         revalidate(); // Refresh the layout
         repaint(); // Repaint the component
     }
 
-    private JButton getjButton() {
+    private JButton getUpdateButton() {
         JButton updateButton = new JButton("Update");
         updateButton.addActionListener(new ActionListener() {
             @Override
@@ -114,9 +127,32 @@ public class JobView extends JFrame {
                 double hourlyWage = Double.parseDouble(hourlyWageField.getText());
                 Job job = new Job(jobClassID, jobTitle, hourlyWage);
                 DataAccess.updateJobClass(job);
+                // Show operation selection view
+                showOperationSelectionView();
             }
         });
         return updateButton;
+    }
+
+    private JButton getBackButton() {
+        JButton backButton = new JButton("Go Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Show operation selection view
+                showOperationSelectionView();
+            }
+        });
+        return backButton;
+    }
+
+    private void showOperationSelectionView() {
+        panel.removeAll();
+        JLabel operationLabel = new JLabel("Select Operation:");
+        panel.add(operationLabel);
+        panel.add(operationComboBox);
+        panel.revalidate();
+        panel.repaint();
     }
 
     public static void main(String[] args) {
