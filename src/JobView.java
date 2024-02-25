@@ -19,7 +19,7 @@ public class JobView extends JFrame {
         panel.setLayout(new GridLayout(4, 2));
 
         JLabel operationLabel = new JLabel("Select Operation:");
-        String[] operations = {"Add Job Class", "Update Job Class"};
+        String[] operations = {"Add Job Class", "Update Job Class", "Delete Job Class"};
         operationComboBox = new JComboBox<>(operations);
         panel.add(operationLabel);
         panel.add(operationComboBox);
@@ -29,10 +29,16 @@ public class JobView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String selectedOperation = (String) operationComboBox.getSelectedItem();
                 assert selectedOperation != null;
-                if (selectedOperation.equals("Add Job Class")) {
-                    addFields();
-                } else {
-                    updateFields();
+                switch (selectedOperation) {
+                    case "Add Job Class":
+                        addJob();
+                        break;
+                    case "Update Job Class":
+                        updateJob();
+                        break;
+                    case "Delete Job Class":
+                        deleteJob();
+                        break;
                 }
             }
         });
@@ -40,7 +46,7 @@ public class JobView extends JFrame {
         add(panel);
     }
 
-    private void addFields() {
+    private void addJob() {
         panel.removeAll(); // Clear previous components
         panel.setLayout(new GridLayout(4, 2));
 
@@ -87,7 +93,7 @@ public class JobView extends JFrame {
         return addButton;
     }
 
-    private void updateFields() {
+    private void updateJob() {
         panel.removeAll(); // Clear previous components
         panel.setLayout(new GridLayout(4, 2));
 
@@ -134,6 +140,40 @@ public class JobView extends JFrame {
         return updateButton;
     }
 
+    private void deleteJob() {
+        panel.removeAll(); // Clear previous components
+        panel.setLayout(new GridLayout(2, 2));
+
+        JLabel jobClassIDLabel = new JLabel("Job Class ID:");
+        jobClassIDField = new JTextField();
+        panel.add(jobClassIDLabel);
+        panel.add(jobClassIDField);
+
+        JButton deleteButton = getDeleteButton();
+        panel.add(deleteButton);
+
+        JButton backButton = getBackButton();
+        panel.add(backButton);
+
+        revalidate(); // Refresh the layout
+        repaint(); // Repaint the component
+    }
+
+    private JButton getDeleteButton() {
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Delete job class
+                int jobClassID = Integer.parseInt(jobClassIDField.getText());
+                 DataAccess.deleteJobClass(jobClassID);
+                // Show operation selection view
+                showOperationSelectionView();
+            }
+        });
+        return deleteButton;
+    }
+
     private JButton getBackButton() {
         JButton backButton = new JButton("Go Back");
         backButton.addActionListener(new ActionListener() {
@@ -148,6 +188,7 @@ public class JobView extends JFrame {
 
     private void showOperationSelectionView() {
         panel.removeAll();
+        panel.setLayout(new GridLayout(4, 2));
         JLabel operationLabel = new JLabel("Select Operation:");
         panel.add(operationLabel);
         panel.add(operationComboBox);
