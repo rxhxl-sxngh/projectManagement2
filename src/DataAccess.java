@@ -313,6 +313,8 @@ public class DataAccess {
                         // If the project assignment doesn't exist, insert a new record
                         insertProjectAssignment(conn, projectId, employeeId, hoursBilled);
                     }
+                    // Update total charge for the project after adding or updating the assignment
+                    updateTotalChargeForProject(conn, projectId);
                 }
             }
         } catch (SQLException e) {
@@ -348,6 +350,16 @@ public class DataAccess {
             preparedStatement.setInt(4, employeeId);
             preparedStatement.executeUpdate();
             System.out.println("Project assignment updated successfully.");
+        }
+    }
+
+    private static void updateTotalChargeForProject(Connection conn, int projectId) throws SQLException {
+        String updateTotalChargeSql = "UPDATE project SET TotalChargeForProject = (SELECT SUM(TotalChargeFromEmployee) FROM projectassignment WHERE ProjectID = ?) WHERE ProjectID = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(updateTotalChargeSql)) {
+            preparedStatement.setInt(1, projectId);
+            preparedStatement.setInt(2, projectId);
+            preparedStatement.executeUpdate();
+            System.out.println("Total charge for project updated successfully.");
         }
     }
 

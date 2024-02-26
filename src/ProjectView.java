@@ -17,7 +17,7 @@ public class ProjectView extends JFrame {
     public ProjectView() throws SQLException {
         setTitle("Project View");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Input Panel
@@ -108,14 +108,21 @@ public class ProjectView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Add employee to project logic here
-                int projectId = projectComboBox.getSelectedIndex();
-                if (projectId != -1) {
-                    // If a project is selected
-                    int employeeId = Integer.parseInt(JOptionPane.showInputDialog("Enter Employee ID:"));
-                    double hoursBilled = Double.parseDouble(JOptionPane.showInputDialog("Enter Hours Billed:"));
+                int selectedIndex = projectComboBox.getSelectedIndex();
+                if (selectedIndex != -1) {
                     try {
-                        DataAccess.addOrUpdateProjectAssignment(projectId, employeeId, hoursBilled);
-                        refreshTable(DataAccess.getProjectByID(projectId));
+                        // Get the selected project from the list of projects
+                        Project selectedProject = DataAccess.getAllProjects().get(selectedIndex);
+                        int projectId = selectedProject.getProjectID(); // Get the ProjectID of the selected project
+                        int employeeId = Integer.parseInt(JOptionPane.showInputDialog("Enter Employee ID:"));
+                        double hoursBilled = Double.parseDouble(JOptionPane.showInputDialog("Enter Hours Billed:"));
+                        try {
+                            DataAccess.addOrUpdateProjectAssignment(projectId, employeeId, hoursBilled);
+                            refreshProjectList();
+                            refreshTable(DataAccess.getProjectByID(projectId));
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
